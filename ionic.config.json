@@ -1,5 +1,7 @@
 {
   "name": "laParada",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

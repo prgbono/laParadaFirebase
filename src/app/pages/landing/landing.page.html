@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>landing</ion-title>
-  </ion-toolbar>
+  <ion-toolbar color="primary"> <ion-title>landing</ion-title> </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
+<ion-content padding class="landing">
+  <!-- TODO add logo
+    <img src="assets/img/logo.jpg" class="auth-img" />  -->
+  <ion-button expand="block" fill="clear" routerLink="/login"> Entrar </ion-button> 
+  <ion-button expand="block" fill="clear" (click)="goToBillList()">Empieza sin cuenta </ion-button>
 </ion-content>
