@@ -14,8 +14,10 @@
 
 <ion-content>
   <ion-content padding>
-    <!-- TODO replace image
-    <img src="assets/img/debt-collector.jpg" /> -->
+    <img [src]="(stock | async)?.picture || placeholderPicture" (click)="uploadPicture()" />
+    <span *ngIf="!(stock | async)?.picture">
+      Click para subir foto
+    </span>
     <ion-card>
       <ion-card-header> Stock Information </ion-card-header>
       <ion-list>

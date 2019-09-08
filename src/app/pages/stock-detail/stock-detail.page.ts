@@ -3,6 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { StockService } from '../../services/stock.service';
 import { Observable } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
+import { Plugins, CameraResultType } from '@capacitor/core';
+
+const { Camera } = Plugins;
 
 @Component({
   selector: 'app-stock-detail',
@@ -12,13 +16,15 @@ import { Observable } from 'rxjs';
 export class StockDetailPage implements OnInit {
   public stock: Observable<any>;
   public stockId: string;
+  public placeholderPicture = 'assets/img/debt-collector.jpg';
 
   constructor(
     public router: Router,
     public route: ActivatedRoute,
     public actionCtrl: ActionSheetController,
     public alertCtrl: AlertController,
-    public stockService: StockService) {
+    public stockService: StockService,
+    private authService: AuthService) {
 
   }
 
@@ -51,6 +57,32 @@ export class StockDetailPage implements OnInit {
       ],
     });
     action.present();
+  }
+
+  async uploadPicture(): Promise<void> {
+    if (this.authService.getUser().isAnonymous === true) {
+      const alert = await this.alertCtrl.create({
+        message:
+          'If you want to continue you will need to provide an email and create a password',
+        buttons: [
+          { text: 'Cancel' }, {
+            text: 'OK', handler: data => {
+              this.router.navigate(['/signup', this.stockId]);
+            },
+          },
+        ],
+      });
+      alert.present();
+    } else {
+      // Take the picture
+      const stockPicture = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+      });
+      //this.stockService.takeStockPhoto(this.stockId, stockPicture.base64String);
+      this.stockService.takeStockPhoto(this.stockId, stockPicture.base64Data.slice(23));
+    }
   }
 
 }

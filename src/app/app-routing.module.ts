@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'users', loadChildren: './pages/users/users.module#UsersPageModule' },
   { path: 'user-detail/:id', loadChildren: './pages/user-detail/user-detail.module#UserDetailPageModule', canActivate: [AuthGuard] },
-  { path: 'signup', loadChildren: './pages/signup/signup.module#SignupPageModule', canActivate: [AuthGuard] },
+  { path: 'signup/:stockId', loadChildren: './pages/signup/signup.module#SignupPageModule', canActivate: [AuthGuard] },
   { path: 'reset-password', loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule' },
   { path: 'stock', loadChildren: './pages/stock/stock.module#StockPageModule' },
   { path: 'stock-detail/:id', loadChildren: './pages/stock-detail/stock-detail.module#StockDetailPageModule', canActivate: [AuthGuard] },

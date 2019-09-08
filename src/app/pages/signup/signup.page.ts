@@ -36,7 +36,9 @@ export class SignupPage implements OnInit {
       const email: string = signupForm.value.email; 
       const password: string = signupForm.value.password;
       await this.authService.linkAccount(email, password); 
-      await loading.dismiss(); this.router.navigateByUrl('/home');
+      await loading.dismiss(); 
+      //this.router.navigateByUrl('/home');
+      this.router.navigateByUrl(`/stock-detail/${this.route.snapshot.paramMap.get('stockId')}`);
     } 
     catch (error) {
       await loading.dismiss();

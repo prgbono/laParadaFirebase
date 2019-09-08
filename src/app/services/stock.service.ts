@@ -4,9 +4,11 @@ import { Injectable } from '@angular/core';
 • AngularFirestore to manage the connection with the database.
 • AngularFirestoreCollection because we will be retrieving collections from the database and AF2 handles them as observables.
 • AngularFirestoreDocument because we will be retrieving documents from the database and AF2 is going to take care of it as an observable.*/
-import { AngularFireAuth } from '@angular/fire/auth'; 
+import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
+import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +17,16 @@ import * as firebase from 'firebase/app';
 export class StockService {
   // stockList will keep a synced array of the list of stock we have stored in the database.
   // public billList: billList is tutorial name, for me is stockList
-  public stockList: AngularFirestoreCollection<any>; 
+  public stockList: AngularFirestoreCollection<any>;
   public userId: string;
- 
+
   constructor(
     private afAuth: AngularFireAuth,
-    private firestore: AngularFirestore) 
-  {
+    private firestore: AngularFirestore,
+    private afStorage: AngularFireStorage) {
     this.afAuth.authState.subscribe(user => {
-      this.userId = user.uid; 
-      this.stockList = this.firestore.collection(`/userProfile/${user.uid}/stockList`); 
+      this.userId = user.uid;
+      this.stockList = this.firestore.collection(`/userProfile/${user.uid}/stockList`);
     });
   }
 
@@ -39,7 +41,7 @@ export class StockService {
     console.log(`Stock id is ${stockId}`);
     return this.firestore.doc(`/userProfile/${this.userId}/stockList/${stockId}`);
   }
-  
+
 
   //TODO Ésta será la f(x) para añadir artículos. Los parámetros pasados son los campos propios de la entidad artículos
   async createStock(
@@ -79,5 +81,17 @@ export class StockService {
     // TODO Esta función tendrá que llevar al usuario a la vista del artículo y editar en el formulario
     return this.stockList.doc(stockId).update({ paid: true });
   }
-  
+
+  takeStockPhoto(stockId: string, imageURL: string): Promise<any> {
+    const storageRef: AngularFireStorageReference = this.afStorage.ref(`${this.userId}/${stockId}/stockPicture/`);
+    return storageRef.putString(imageURL, 'base64', {
+      contentType: 'image/png',
+    })
+    .then(() => {
+      return this.stockList.doc(stockId).update({
+        picture: storageRef.getDownloadURL(),
+      });
+    });
+  }
+
 }
