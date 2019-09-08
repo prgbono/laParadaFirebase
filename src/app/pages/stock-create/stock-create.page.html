@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>stock-create</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="newStockForm">
+      <ion-item>
+        <ion-label position="stacked">Stock Name</ion-label>
+        <ion-input formControlName="name" type="text" placeholder="How do you identify this stock?" [class.invalid]="!newStockForm.controls['name'].valid &&
+        newStockForm.controls['name'].touched">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Amount</ion-label>
+        <ion-input formControlName="amount" type="number" placeholder="How much do you have to pay?" [class.invalid]="!newStockForm.controls['amount'].valid &&
+      newStockForm.controls['amount'].touched">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Due Date</ion-label>
+        <!-- TODO Date format!! -->
+        <ion-datetime displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" formControlName="dueDate" max="2025-10-31"
+          [class.invalid]="!newStockForm.controls['dueDate'].valid && newStockForm.controls['dueDate'].touched">
+        </ion-datetime>
+      </ion-item>
+      <ion-button expand="block" (click)="createStock(newStockForm)"> Create new stock
+      </ion-button>
+    </form>
+  </ion-content>
